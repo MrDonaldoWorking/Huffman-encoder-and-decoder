@@ -7,8 +7,8 @@ TEST(correctness, empty) {
     std::stringstream tmp;
     std::stringstream out;
 
-    encode(in, tmp);
-    decode(tmp, out);
+    EXPECT_NO_THROW(encode(in, tmp));
+    EXPECT_NO_THROW(decode(tmp, out));
     EXPECT_EQ(in.str(), out.str());
 }
 
@@ -17,8 +17,8 @@ TEST(correctness, one_symbol) {
     std::stringstream tmp;
     std::stringstream out;
 
-    encode(in, tmp);
-    decode(tmp, out);
+    EXPECT_NO_THROW(encode(in, tmp));
+    EXPECT_NO_THROW(decode(tmp, out));
     EXPECT_EQ(in.str(), out.str());
 }
 
@@ -27,8 +27,8 @@ TEST(correctness, hello) {
     std::stringstream tmp;
     std::stringstream out;
 
-    encode(in, tmp);
-    decode(tmp, out);
+    EXPECT_NO_THROW(encode(in, tmp));
+    EXPECT_NO_THROW(decode(tmp, out));
     EXPECT_EQ(in.str(), out.str());
 }
 
@@ -41,8 +41,8 @@ TEST(correctness, all_chars) {
         in << (char) i;
     }
 
-    encode(in, tmp);
-    decode(tmp, out);
+    EXPECT_NO_THROW(encode(in, tmp));
+    EXPECT_NO_THROW(decode(tmp, out));
     EXPECT_EQ(in.str(), out.str());
 }
 
@@ -56,8 +56,8 @@ TEST(correctness, small_random) {
             in << (char) (rand() % 256);
         }
 
-        encode(in, tmp);
-        decode(tmp, out);
+        EXPECT_NO_THROW(encode(in, tmp));
+        EXPECT_NO_THROW(decode(tmp, out));
         EXPECT_EQ(in.str(), out.str());
     }
 }
@@ -72,8 +72,8 @@ TEST(correctness, large_random) {
             in << (char) (rand() % ALPHABET_SIZE);
         }
 
-        encode(in, tmp);
-        decode(tmp, out);
+        EXPECT_NO_THROW(encode(in, tmp));
+        EXPECT_NO_THROW(decode(tmp, out));
         EXPECT_EQ(in.str(), out.str());
     }
 }
@@ -90,10 +90,10 @@ TEST(correctness, twice) {
             in << (char) (rand() % ALPHABET_SIZE);
         }
 
-        encode(in, tmp1);
-        encode(tmp1, tmp2);
-        decode(tmp2, out1);
-        decode(out1, out2);
+        EXPECT_NO_THROW(encode(in, tmp1));
+        EXPECT_NO_THROW(encode(tmp1, tmp2));
+        EXPECT_NO_THROW(decode(tmp2, out1));
+        EXPECT_NO_THROW(decode(out1, out2));
         EXPECT_EQ(in.str(), out2.str());
     }
 }
