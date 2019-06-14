@@ -1,6 +1,6 @@
 #include <fstream>
 
-#include "encode_decode.h"
+#include "combine.h"
 #include "encode.h"
 #include "decode.h"
 
@@ -92,19 +92,18 @@ void decode(std::istream &input, std::ostream &output) {
     uint32_t letter_qty;
     input.read((char *) &letter_qty, sizeof(letter_qty));
     std::vector<uint8_t> letters(letter_qty);
-    input.read((char *) letters.data(), sizeof(uint8_t) * letters.size());
+    input.read((char *) letters.data(), letters.size());
 
     uint64_t cipher_sz;
     input.read((char *) &cipher_sz, sizeof(cipher_sz));
 
-    uint64_t read = input.tellg();
     decoder dec(letters, tree_trav);
     dec.set_need(cipher_sz);
 
     std::vector<uint8_t> res;
     std::vector<uint8_t> curr(1);
-    for (; read < file_sz; ++read) {
-        input.read((char *) curr.data(), curr.size());
+    for (uint64_t read = input.tellg(); read < file_sz; ++read) {
+        input.read((char *) curr.data(), 1);
         dec.decode(curr[0], res);
         output.write((char *) res.data(), res.size());
         res.clear();

@@ -28,8 +28,8 @@ private:
     std::vector<uint8_t> tr;
     std::vector<uint8_t> letters;
 
-    void make_code();
-    void make_tree();
+    void gen_code();
+    void gen_tree();
 };
 
 #endif //HUFFMAN_ENCODE_H

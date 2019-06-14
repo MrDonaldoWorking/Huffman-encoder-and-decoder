@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "../lib/encode_decode.h"
+#include "combine.h"
 
 int main(int argc, char *argv[]) {
     // std::cout << "Please input encode/decode inputFile outputFile\n";

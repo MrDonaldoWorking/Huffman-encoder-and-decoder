@@ -5,9 +5,9 @@
 #include "tree.h"
 
 decoder::decoder(std::vector<uint8_t> ls, std::vector<uint8_t> str) :
-        is_f(true), decoded(0),
+        decoded(0),
         letters(std::move(ls)), tree_struct(std::move(str)) {
-    build(&t, letters, tree_struct);
+    recover(&t, letters, tree_struct);
 }
 
 void check(bool state, tree **x) {
@@ -15,7 +15,7 @@ void check(bool state, tree **x) {
         if ((*x)->get_l() == nullptr) {
             throw std::runtime_error("wrong tree, left == nullptr");
         }
-        *x =  (*x)->get_l();
+        *x = (*x)->get_l();
     } else {
         if ((*x)->get_r() == nullptr) {
             throw std::runtime_error("wrong tree, right == nullptr");

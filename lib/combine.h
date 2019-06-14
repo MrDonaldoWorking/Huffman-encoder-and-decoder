@@ -1,5 +1,5 @@
-#ifndef HUFFMAN_ENCODE_DECODE_H
-#define HUFFMAN_ENCODE_DECODE_H
+#ifndef HUFFMAN_COMBINE_H
+#define HUFFMAN_COMBINE_H
 
 #include <iostream>
 #include <string>
@@ -12,4 +12,4 @@ void decode(std::string const& in, std::string const& out);
 void decode(std::istream &input, std::ostream &output);
 
 
-#endif //HUFFMAN_ENCODE_DECODE_H
+#endif //HUFFMAN_COMBINE_H

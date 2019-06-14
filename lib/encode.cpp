@@ -17,8 +17,8 @@ encoder::encoder(counter &b) : last(0), not_used(0), len(0) {
     }
 
     std::sort(trees.begin(), trees.end(), cmp);
-    make_tree();
-    make_code();
+    gen_tree();
+    gen_code();
     t = trees[0];
 }
 
@@ -65,14 +65,14 @@ void encoder::encode(uint8_t letter, std::vector<uint8_t> &b_out) {
     }
 }
 
-void encoder::make_code() {
+void encoder::gen_code() {
     code.resize(ALPHABET_SIZE);
     std::vector<uint8_t> curr;
     dfs(trees[0], curr, letters, code);
-    cod(trees[0], tr);
+    travel(trees[0], tr);
 }
 
-void encoder::make_tree() {
+void encoder::gen_tree() {
     if (trees.size() == 1) {
         trees.push_back(new tree(nullptr, nullptr, trees[0]->get_str(),
                 trees[0]->get_w()));

@@ -31,34 +31,34 @@ void tree::merge(tree *x, tree *y) {
     weight = x->weight + y->weight;
 }
 
-void dfs(tree *t, std::vector<uint8_t> &curr, std::vector<uint8_t> &order,
+void dfs(tree *t, std::vector<uint8_t> &curr, std::vector<uint8_t> &letters,
          std::vector<std::vector<uint8_t>> &codes) {
     if (t->left != nullptr) {
         curr.push_back(0);
-        dfs(t->left, curr, order, codes);
+        dfs(t->left, curr, letters, codes);
 
         curr.back() = 1;
-        dfs(t->right, curr, order, codes);
+        dfs(t->right, curr, letters, codes);
 
         curr.pop_back();
     } else {
         codes[t->str[0]] = curr;
-        order.push_back(t->str[0]);
+        letters.push_back(t->str[0]);
         return;
     }
 }
 
-void cod(tree *t, std::vector<uint8_t> &curr) {
+void travel(tree *t, std::vector<uint8_t> &res) {
     if (t->left != nullptr) {
-        curr.push_back(0);
-        cod(t->left, curr);
+        res.push_back(0);
+        travel(t->left, res);
 
-        curr.push_back(1);
-        cod(t->right, curr);
+        res.push_back(1);
+        travel(t->right, res);
     }
 }
 
-void build(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
+void recover(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
     size_t pos = 0;
     for (bool q : str) {
         if (!q) {
@@ -67,7 +67,8 @@ void build(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
             t = t->left;
         } else {
             if (pos == ls.size()) {
-                throw std::runtime_error("wrong tree, pos == arr size");
+                throw std::runtime_error("wrong tree, or letters,  pos == arr "
+                                         "size");
             }
             t->str.push_back(ls[pos++]);
 

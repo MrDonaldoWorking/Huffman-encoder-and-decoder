@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include <sstream>
-#include "../lib/encode_decode.h"
+#include "combine.h"
 
 TEST(correctness, empty) {
     std::stringstream in("");
@@ -46,6 +46,20 @@ TEST(correctness, all_chars) {
     EXPECT_EQ(in.str(), out.str());
 }
 
+TEST(correctness, aaaaa) {
+    std::stringstream in;
+    std::stringstream tmp;
+    std::stringstream out;
+
+    for (size_t i = 0; i < 1024 * 32; ++i) {
+        in << "aaaaa";
+    }
+
+    EXPECT_NO_THROW(encode(in, tmp));
+    EXPECT_NO_THROW(decode(tmp, out));
+    EXPECT_EQ(in.str(), out.str());
+}
+
 TEST(correctness, small_random) {
     for (size_t tests = 0; tests < 100; ++tests) {
         std::stringstream in;
@@ -81,19 +95,19 @@ TEST(correctness, large_random) {
 TEST(correctness, twice) {
     for (size_t tests = 0; tests < 5; ++tests) {
         std::stringstream in;
+        std::stringstream tmp;
         std::stringstream tmp1;
-        std::stringstream tmp2;
         std::stringstream out1;
-        std::stringstream out2;
+        std::stringstream out;
 
         for (size_t i = 0; i < 1024 * 1024; ++i) {
             in << (char) (rand() % ALPHABET_SIZE);
         }
 
-        EXPECT_NO_THROW(encode(in, tmp1));
-        EXPECT_NO_THROW(encode(tmp1, tmp2));
-        EXPECT_NO_THROW(decode(tmp2, out1));
-        EXPECT_NO_THROW(decode(out1, out2));
-        EXPECT_EQ(in.str(), out2.str());
+        EXPECT_NO_THROW(encode(in, tmp));
+        EXPECT_NO_THROW(encode(tmp, tmp1));
+        EXPECT_NO_THROW(decode(tmp1, out1));
+        EXPECT_NO_THROW(decode(out1, out));
+        EXPECT_EQ(in.str(), out.str());
     }
 }

@@ -28,8 +28,9 @@ private:
 
     friend void dfs(tree *, std::vector<uint8_t> &, std::vector<uint8_t> &,
                     std::vector<std::vector<uint8_t>> &);
-    friend void cod(tree *, std::vector<uint8_t> &);
-    friend void build(tree *, std::vector<uint8_t> &, std::vector<uint8_t> &);
+    friend void travel(tree *, std::vector<uint8_t> &);
+    friend void recover(tree *t, std::vector<uint8_t> &ls,
+                        std::vector<uint8_t> &str);
 };
 
 struct counter {

@@ -15,7 +15,6 @@ struct decoder {
     uint64_t get_decoded();
 
 private:
-    bool is_f;
     uint64_t decoded, need;
     std::vector<bool> last;
     std::vector<uint8_t> letters;
