@@ -3,6 +3,9 @@
 
 #include <vector>
 
+const size_t ALPHABET_SIZE = 256;
+const size_t BLOCK_SIZE = 8;
+
 struct tree {
     tree();
     tree(tree *, tree *, std::vector<uint8_t>, uint64_t);
@@ -14,13 +17,13 @@ struct tree {
     tree *get_l() const;
     tree *get_r() const;
     uint8_t get_sym() const;
-    std::vector<uint8_t> get_arr() const;
+    std::vector<uint8_t> get_str() const;
 
 private:
     tree *left;
     tree *right;
     tree *parent;
-    std::vector<uint8_t> sym_arr;
+    std::vector<uint8_t> str;
     uint64_t weight;
 
     friend void dfs(tree *, std::vector<uint8_t> &, std::vector<uint8_t> &,

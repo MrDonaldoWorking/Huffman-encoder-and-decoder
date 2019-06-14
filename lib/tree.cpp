@@ -8,7 +8,7 @@ tree::tree() : left(nullptr), right(nullptr), parent(nullptr), weight(0) {}
 
 tree::tree(tree *_l, tree *_r, std::vector<uint8_t> _sym_arr, uint64_t _w) :
         left(_l), right(_r), parent(nullptr),
-        sym_arr(std::move(_sym_arr)), weight(_w) {}
+        str(std::move(_sym_arr)), weight(_w) {}
 
 tree::~tree() {
     if (left != nullptr) {
@@ -20,9 +20,9 @@ tree::~tree() {
 }
 
 void tree::merge(tree *x, tree *y) {
-    sym_arr = x->sym_arr;
-    for (uint8_t sym : y->sym_arr) {
-        sym_arr.push_back(sym);
+    str = x->str;
+    for (uint8_t sym : y->str) {
+        str.push_back(sym);
     }
 
     y->parent = x->parent = this;
@@ -42,18 +42,18 @@ void dfs(tree *t, std::vector<uint8_t> &curr, std::vector<uint8_t> &order,
 
         curr.pop_back();
     } else {
-        codes[t->sym_arr[0]] = curr;
-        order.push_back(t->sym_arr[0]);
+        codes[t->str[0]] = curr;
+        order.push_back(t->str[0]);
         return;
     }
 }
 
 void cod(tree *t, std::vector<uint8_t> &curr) {
     if (t->left != nullptr) {
-        curr.push_back(1);
+        curr.push_back(0);
         cod(t->left, curr);
 
-        curr.push_back(0);
+        curr.push_back(1);
         cod(t->right, curr);
     }
 }
@@ -61,7 +61,7 @@ void cod(tree *t, std::vector<uint8_t> &curr) {
 void build(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
     size_t pos = 0;
     for (bool q : str) {
-        if (q) {
+        if (!q) {
             t->left = new tree();
             t->left->parent = t;
             t = t->left;
@@ -69,7 +69,7 @@ void build(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
             if (pos == ls.size()) {
                 throw std::runtime_error("wrong tree, pos == arr size");
             }
-            t->sym_arr.push_back(ls[pos++]);
+            t->str.push_back(ls[pos++]);
 
             if (t->parent == nullptr) {
                 throw std::runtime_error("wrong tree, parent == nullptr");
@@ -84,9 +84,9 @@ void build(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
         }
     }
 
-    t->sym_arr.push_back(ls[pos++]);
+    t->str.push_back(ls[pos++]);
     if (pos != ls.size()) {
-        throw std::runtime_error("wrong symbol array");
+        throw std::runtime_error("tree doesn't suit string");
     }
 }
 
@@ -103,15 +103,15 @@ tree *tree::get_r() const {
 }
 
 uint8_t tree::get_sym() const {
-    return sym_arr[0];
+    return str[0];
 }
 
-std::vector<uint8_t> tree::get_arr() const {
-    return sym_arr;
+std::vector<uint8_t> tree::get_str() const {
+    return str;
 }
 
 counter::counter() {
-    cnt.resize(256);
+    cnt.resize(ALPHABET_SIZE);
 }
 
 void counter::add(std::vector<uint8_t> const& arr) {

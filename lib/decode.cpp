@@ -10,72 +10,65 @@ decoder::decoder(std::vector<uint8_t> ls, std::vector<uint8_t> str) :
     build(&t, letters, tree_struct);
 }
 
-tree *check(bool state, tree *x) {
+void check(bool state, tree **x) {
     if (!state) {
-        if (x->get_l() == nullptr) {
+        if ((*x)->get_l() == nullptr) {
             throw std::runtime_error("wrong tree, left == nullptr");
         }
-        return x->get_l();
+        *x =  (*x)->get_l();
     } else {
-        if (x->get_r() == nullptr) {
+        if ((*x)->get_r() == nullptr) {
             throw std::runtime_error("wrong tree, right == nullptr");
         }
-        return x->get_r();
+        *x = (*x)->get_r();
     }
 }
 
-bool decoder::update(bool state, tree *x, std::vector<uint8_t> &out) {
+bool decoder::update(bool state, tree **x, std::vector<uint8_t> &out) {
     if (state) {
-        out.push_back(x->get_sym());
+        out.push_back((*x)->get_sym());
         decoded += last.size();
         last.clear();
-        x = &t;
+        *x = &t;
         return (need == decoded);
     }
 
     return false;
 }
 
-void decoder::decode(std::vector<uint8_t> &b, std::vector<uint8_t> &out) {
+void decoder::decode(uint8_t b, std::vector<uint8_t> &out) {
     tree *curr = &t;
-    bool is_first = true;
-    for (unsigned char i : b) {
-        int j = 7;
-        if (!last.empty()) {
-            bool f = false;
-            if (is_first) {
-                for (auto &&el : last) {
-                    curr = check(el, curr);
-                }
+    int j = BLOCK_SIZE - 1;
+    if (!last.empty()) {
+        bool f = false;
+        for (auto &&el : last) {
+            check(el, &curr);
+        }
 
-                is_first = false;
-                while (j >= 0) {
-                    last.push_back(static_cast<bool>((i >> j) & 1));
-                    curr = check(last.back(), curr);
+        while (j >= 0) {
+            last.push_back(static_cast<bool>((b >> j) & 1));
+            check(last.back(), &curr);
 
-                    --j;
+            --j;
 
-                    if (curr->get_r() == nullptr) {
-                        f = true;
-                        break;
-                    }
-                }
-
-                if (update(f, curr, out)) {
-                    return;
-                }
+            if (curr->get_r() == nullptr) {
+                f = true;
+                break;
             }
+        }
 
-            is_first = false;
-            while (j >= 0) {
-                last.push_back(static_cast<bool>((i >> j) & 1));
-                --j;
-                curr = check(last.back(), curr);
+        if (update(f, &curr, out)) {
+            return;
+        }
+    }
 
-                if (update((curr->get_r() == nullptr), curr, out)) {
-                    return;
-                }
-            }
+    while (j >= 0) {
+        last.push_back(static_cast<bool>((b >> j) & 1));
+        --j;
+        check(last.back(), &curr);
+
+        if (update((curr->get_r() == nullptr), &curr, out)) {
+            return;
         }
     }
 }
@@ -87,8 +80,3 @@ void decoder::set_need(uint64_t val) {
 uint64_t decoder::get_decoded() {
     return decoded;
 }
-
-uint64_t decoder::get_need() {
-    return need;
-}
-

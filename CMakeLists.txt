@@ -9,11 +9,27 @@ if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address,undefined -D_GLIBCXX_DEBUG")
 endif ()
 
-include_directories(lib util)
+include_directories(lib)
+include_directories(util)
+include_directories(test/gtest)
 
-add_library(huflib STATIC
-        lib/decode.cpp lib/tree.cpp lib/encode.cpp)
+set(huflib
+        lib/decode.cpp
+        lib/tree.cpp
+        lib/encode.cpp
+        lib/encode_decode.cpp)
 
-add_executable(HUFFMAN util/console_utility.cpp)
+add_executable(console
+        ${huflib}
+        util/console_utility.cpp)
 
-target_link_libraries(HUFFMAN huflib)
+add_executable(testing
+        ${huflib}
+        test/testing
+        test/gtest/gtest-all.cc
+        test/gtest/gtest_main.cc
+        test/gtest/gtest.h)
+
+target_link_libraries(console -lpthread)
+
+target_link_libraries(testing -lpthread)

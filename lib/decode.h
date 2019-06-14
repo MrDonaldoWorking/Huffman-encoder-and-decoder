@@ -9,11 +9,10 @@ struct decoder {
     decoder() = default;
     decoder(std::vector<uint8_t>, std::vector<uint8_t>);
 
-    void decode(std::vector<uint8_t> &, std::vector<uint8_t> &);
+    void decode(uint8_t, std::vector<uint8_t> &);
 
     void set_need(uint64_t);
     uint64_t get_decoded();
-    uint64_t get_need();
 
 private:
     bool is_f;
@@ -21,10 +20,9 @@ private:
     std::vector<bool> last;
     std::vector<uint8_t> letters;
     std::vector<uint8_t> tree_struct;
-    std::vector<std::vector<uint8_t>> codes;
     tree t;
 
-    bool update(bool, tree *, std::vector<uint8_t> &);
+    bool update(bool, tree **, std::vector<uint8_t> &);
 };
 
 

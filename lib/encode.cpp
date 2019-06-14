@@ -9,7 +9,7 @@ bool cmp(tree *x, tree *y) {
 
 encoder::encoder(counter &b) : last(0), not_used(0), len(0) {
     freq = b.get_cnt();
-    for (size_t i = 0; i < 256; ++i) {
+    for (size_t i = 0; i < ALPHABET_SIZE; ++i) {
         if (freq[i] > 0) {
             std::vector<uint8_t> v(1, (uint8_t) i);
             trees.push_back(new tree(nullptr, nullptr, v, freq[i]));
@@ -29,36 +29,36 @@ encoder::~encoder() {
 void encoder::encode(uint8_t letter, std::vector<uint8_t> &b_out) {
     size_t sz = code[letter].size();
     size_t st = 0;
-    if (sz >= 8 - not_used) {
-        for (size_t i = not_used; i < 8; ++i) {
+    if (sz >= BLOCK_SIZE - not_used) {
+        for (size_t i = not_used; i < BLOCK_SIZE; ++i) {
             if (code[letter][i - not_used] > 0) {
-                last += (1u << (7 - i));
+                last += (1u << (BLOCK_SIZE - 1 - i));
             }
         }
 
         b_out.push_back(last);
-        st = static_cast<size_t>(8 - not_used);
-        sz -= 8 - not_used;
+        st = static_cast<size_t>(BLOCK_SIZE - not_used);
+        sz -= BLOCK_SIZE - not_used;
         last = not_used = 0;
     }
 
-    while (sz >= 8) {
+    while (sz >= BLOCK_SIZE) {
         uint8_t curr = 0;
-        for (size_t i = 0; i < 8; ++i) {
+        for (size_t i = 0; i < BLOCK_SIZE; ++i) {
             if (code[letter][i + st] > 0) {
-                curr += (1u << (7 - i));
+                curr += (1u << (BLOCK_SIZE - 1 - i));
             }
         }
 
         b_out.push_back(curr);
-        st += 8;
-        sz -= 8;
+        st += BLOCK_SIZE;
+        sz -= BLOCK_SIZE;
     }
 
     if (sz != 0) {
         for (size_t i = 0; i < sz; ++i) {
             if (code[letter][i + st] > 0) {
-                last += (1u << (7 - i - not_used));
+                last += (1u << (BLOCK_SIZE - 1 - i - not_used));
             }
         }
         not_used += sz;
@@ -66,7 +66,7 @@ void encoder::encode(uint8_t letter, std::vector<uint8_t> &b_out) {
 }
 
 void encoder::make_code() {
-    code.resize(256);
+    code.resize(ALPHABET_SIZE);
     std::vector<uint8_t> curr;
     dfs(trees[0], curr, letters, code);
     cod(trees[0], tr);
@@ -74,7 +74,7 @@ void encoder::make_code() {
 
 void encoder::make_tree() {
     if (trees.size() == 1) {
-        trees.push_back(new tree(nullptr, nullptr, trees[0]->get_arr(),
+        trees.push_back(new tree(nullptr, nullptr, trees[0]->get_str(),
                 trees[0]->get_w()));
     }
 
@@ -112,7 +112,7 @@ void encoder::make_tree() {
 
 uint64_t encoder::get_len() {
     len = 0;
-    for (size_t i = 0; i < 256; ++i) {
+    for (size_t i = 0; i < ALPHABET_SIZE; ++i) {
         len += (uint64_t) (freq[i] * code[i].size());
     }
     return len;
