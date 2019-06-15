@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include <sstream>
+#include <random>
 #include "combine.h"
 
 TEST(correctness, empty) {
@@ -62,16 +63,13 @@ TEST(correctness, aaaaa) {
 
 TEST(correctness, bad_input) {
     for (size_t i = 1; i < 21; ++i) {
-        std::cout << "Testing " << i << '\n';
         std::stringstream tmp;
         std::stringstream out;
 
         for (size_t j = 0; j < i; ++j) {
             char ch = rand() % 2;
-            std::cout << (int) ch;
             tmp.write((char *) &ch, 1);
         }
-        std::cout << '\n';
         EXPECT_THROW(decode(tmp, out), std::runtime_error);
     }
 }
