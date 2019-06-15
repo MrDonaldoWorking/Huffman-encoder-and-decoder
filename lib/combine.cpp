@@ -81,7 +81,7 @@ void decode(std::istream &input, std::ostream &output) {
     uint32_t tree_sz;
     input.read((char *) &tree_sz, sizeof(tree_sz));
     std::vector<uint8_t> tree_trav(tree_sz);
-    input.read((char *) tree_trav.data(), sizeof(uint8_t) * tree_sz);
+    input.read((char *) tree_trav.data(), tree_sz);
 
     for (size_t i = 0; i < tree_sz; ++i) {
         if (tree_trav[i] != 0 && tree_trav[i] != 1) {
