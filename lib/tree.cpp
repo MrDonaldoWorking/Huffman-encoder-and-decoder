@@ -62,7 +62,7 @@ void recover(tree *t, std::vector<uint8_t> &ls, std::vector<uint8_t> &str) {
     if (ls.empty()) {
         throw std::runtime_error("letter arr is empty");
     }
-    
+
     size_t pos = 0;
     for (bool q : str) {
         if (!q) {

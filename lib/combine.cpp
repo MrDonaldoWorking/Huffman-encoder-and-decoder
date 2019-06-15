@@ -71,6 +71,9 @@ void decode(std::istream &input, std::ostream &output) {
 //        output.close();
         return;
     }
+    if (file_sz < 21) {
+        throw std::runtime_error("bad encode, can't decode it");
+    }
 
     input.seekg(0, std::ios::beg);
 

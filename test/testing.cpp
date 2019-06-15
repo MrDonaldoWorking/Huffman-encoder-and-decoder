@@ -62,16 +62,17 @@ TEST(correctness, aaaaa) {
 }
 
 TEST(correctness, bad_input) {
-    for (size_t i = 1; i < 21; ++i) {
-        std::stringstream tmp;
-        std::stringstream out;
-
-        for (size_t j = 0; j < i; ++j) {
-            char ch = rand() % 2;
-            tmp.write((char *) &ch, 1);
-        }
-        EXPECT_THROW(decode(tmp, out), std::runtime_error);
-    }
+    std::stringstream tmp("#include <stdio.h>\n"
+                          "\n"
+                          "using namespace std;"
+                          "\n"
+                          "int main() {"
+                          "    printf(\"Hello, World!\\n\");"
+                          "\n"
+                          "    return 0;"
+                          "}\n");
+    std::stringstream out;
+    EXPECT_THROW(decode(tmp, out), std::runtime_error);
 }
 
 TEST(correctness, small_random) {
