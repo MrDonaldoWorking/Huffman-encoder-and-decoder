@@ -6,10 +6,10 @@
 #include "tree.h"
 
 void encode(std::string const& in, std::string const& out);
-void encode(std::istream &input, std::ostream &output);
+void encode(std::string const& in, std::ofstream &output);
 
 void decode(std::string const& in, std::string const& out);
-void decode(std::istream &input, std::ostream &output);
+void decode(std::string const& in, std::ofstream &output);
 
 
 #endif //HUFFMAN_COMBINE_H

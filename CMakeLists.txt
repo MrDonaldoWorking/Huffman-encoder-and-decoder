@@ -17,7 +17,8 @@ set(huflib
         lib/decode.cpp
         lib/tree.cpp
         lib/encode.cpp
-        lib/combine.cpp)
+        lib/combine.cpp
+        lib/reader.cpp)
 
 add_executable(console
         ${huflib}
