@@ -8,12 +8,11 @@
 static std::string IN = "in.txt";
 static std::string OUT = "out.txt";
 
-void check(std::string const &in, std::string const &out) {
-    std::ofstream tmp1(in + ".decoded", std::ios::binary);
-    EXPECT_NO_THROW(encode(in, tmp1));
-    EXPECT_NO_THROW(decode(in + ".decoded", out));
+void check(std::string const &name) {
+    EXPECT_NO_THROW(encode(name + ".in", name + ".encoded"));
+    EXPECT_NO_THROW(decode(name + ".encoded", name + ".out"));
 
-    reader r_in(in), r_out(out);
+    reader r_in(name + ".in"), r_out(name + ".out");
     while (!r_in.eof() && !r_out.eof()) {
         EXPECT_EQ(r_in.get_next(), r_out.get_next());
     }
@@ -21,15 +20,15 @@ void check(std::string const &in, std::string const &out) {
 }
 
 TEST(correctness, empty) {
-    check("test/files/empty.in", "test/files/empty.out");
+    check("test/files/empty");
 }
 
 TEST(correctness, one_symbol) {
-    check("test/files/one_symbol.in", "test/files/one_symbol.out");
+    check("test/files/one_symbol");
 }
 
 TEST(correctness, hello) {
-    check("test/files/hello.in", "test/files/hello.out");
+    check("test/files/hello");
 }
 
 TEST(correctness, all_chars) {
@@ -38,7 +37,7 @@ TEST(correctness, all_chars) {
         tmp << (char) i;
     }
 
-    check("test/files/all_chars.in", "test/files/all_chars.out");
+    check("test/files/all_chars");
 }
 
 TEST(correctness, aaaaa) {
@@ -47,7 +46,15 @@ TEST(correctness, aaaaa) {
         tmp << "aaaaa";
     }
 
-    check("test/files/aaaaa.in", "test/files/aaaaa.out");
+    check("test/files/aaaaa");
+}
+
+TEST(correctness, mathan) {
+    check("test/files/mathan");
+}
+
+TEST(correctness, overlord) {
+    check("test/files/overlord");
 }
 
 TEST(correctness, bad_input) {
@@ -76,7 +83,7 @@ TEST(correctness, small_random) {
             tmp << (char) (rand() % 256);
         }
 
-        check("test/files/small_random.in", "test/files/small_random.out");
+        check("test/files/small_random");
     }
 }
 
@@ -87,8 +94,12 @@ TEST(correctness, large_random) {
             tmp << (char) (rand() % ALPHABET_SIZE);
         }
 
-        check("test/files/large_random.in", "test/files/large_random.out");
+        check("test/files/large_random");
     }
+}
+
+TEST(correctness, 20MB) {
+    check("test/files/rus_gre_20MB");
 }
 
 TEST(correctness, twice) {
@@ -104,9 +115,9 @@ TEST(correctness, twice) {
         EXPECT_NO_THROW(encode("test/files/twice_tmp.encoded",
                                "test/files/twice_tmp2.encoded"));
         EXPECT_NO_THROW(decode("test/files/twice_tmp2.encoded",
-                               "test/files/twice_tmp3.encoded"));
-        EXPECT_NO_THROW(decode("test/files/twice_tmp3.encoded",
+                               "test/files/twice_tmp3.decoded"));
+        EXPECT_NO_THROW(decode("test/files/twice_tmp3.decoded",
                                "test/files/twice.out"));
-        check("test/files/twice.in", "test/files/twice.out");
+        check("test/files/twice");
     }
 }

@@ -57,7 +57,7 @@ uint64_t reader::get_next_int(size_t sz) {
     get_next_arr(bytes, sz);
     for (size_t i = sz - 1; i != 0; --i) {
         res += bytes[i];
-        res <<= 8;
+        res <<= 8u;
     }
 
     return res + bytes[0];
