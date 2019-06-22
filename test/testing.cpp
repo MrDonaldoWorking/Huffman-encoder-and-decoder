@@ -5,12 +5,9 @@
 #include <reader.h>
 #include "combine.h"
 
-static std::string IN = "in.txt";
-static std::string OUT = "out.txt";
-
 void check(std::string const &name) {
-    EXPECT_NO_THROW(encode(name + ".in", name + ".encoded"));
-    EXPECT_NO_THROW(decode(name + ".encoded", name + ".out"));
+    encode(name + ".in", name + ".encoded");
+    decode(name + ".encoded", name + ".out");
 
     reader r_in(name + ".in"), r_out(name + ".out");
     while (!r_in.eof() && !r_out.eof()) {
@@ -19,16 +16,24 @@ void check(std::string const &name) {
     EXPECT_EQ(r_in.eof(), r_out.eof());
 }
 
+void check_no_throw(std::string const &name) {
+    EXPECT_NO_THROW(check(name));
+}
+
+void check_throw(std::string const &name) {
+    EXPECT_THROW(check(name), std::runtime_error);
+}
+
 TEST(correctness, empty) {
-    check("test/files/empty");
+    check_no_throw("test/files/empty");
 }
 
 TEST(correctness, one_symbol) {
-    check("test/files/one_symbol");
+    check_no_throw("test/files/one_symbol");
 }
 
 TEST(correctness, hello) {
-    check("test/files/hello");
+    check_no_throw("test/files/hello");
 }
 
 TEST(correctness, all_chars) {
@@ -37,7 +42,7 @@ TEST(correctness, all_chars) {
         tmp << (char) i;
     }
 
-    check("test/files/all_chars");
+    check_no_throw("test/files/all_chars");
 }
 
 TEST(correctness, aaaaa) {
@@ -46,15 +51,19 @@ TEST(correctness, aaaaa) {
         tmp << "aaaaa";
     }
 
-    check("test/files/aaaaa");
+    check_no_throw("test/files/aaaaa");
+}
+
+TEST(correctness, fictive_file) {
+    check_throw("test/files/not_exist");
 }
 
 TEST(correctness, mathan) {
-    check("test/files/mathan");
+    check_no_throw("test/files/mathan");
 }
 
 TEST(correctness, overlord) {
-    check("test/files/overlord");
+    check_no_throw("test/files/overlord");
 }
 
 TEST(correctness, bad_input) {
@@ -83,7 +92,7 @@ TEST(correctness, small_random) {
             tmp << (char) (rand() % 256);
         }
 
-        check("test/files/small_random");
+        check_no_throw("test/files/small_random");
     }
 }
 
@@ -94,12 +103,12 @@ TEST(correctness, large_random) {
             tmp << (char) (rand() % ALPHABET_SIZE);
         }
 
-        check("test/files/large_random");
+        check_no_throw("test/files/large_random");
     }
 }
 
 TEST(correctness, 20MB) {
-    check("test/files/rus_gre_20MB");
+    check_no_throw("test/files/rus_gre_20MB");
 }
 
 TEST(correctness, twice) {
@@ -118,6 +127,6 @@ TEST(correctness, twice) {
                                "test/files/twice_tmp3.decoded"));
         EXPECT_NO_THROW(decode("test/files/twice_tmp3.decoded",
                                "test/files/twice.out"));
-        check("test/files/twice");
+        check_no_throw("test/files/twice");
     }
 }

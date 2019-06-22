@@ -3,6 +3,7 @@
 reader::reader(std::string const& s) : in(s, std::ios::binary), name(s),
     buffer(new uint8_t[BUF_LEN]), curr_pos(0), end_pos(0), already_read(0) {
     if (!in.is_open()) {
+        delete[] buffer;
         throw std::runtime_error("file not found");
     }
 }

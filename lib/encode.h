@@ -7,6 +7,8 @@
 struct encoder {
     encoder() = default;
     explicit encoder(counter &);
+    encoder(encoder &e) = delete;
+    encoder &operator=(encoder &e) = delete;
     ~encoder();
 
     void encode(uint8_t, std::vector<uint8_t> &);

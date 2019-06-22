@@ -11,6 +11,8 @@ const size_t BUF_LEN = 256;
 struct reader {
     reader() = delete;
     explicit reader(std::string const& s);
+    reader(reader &r) = delete;
+    reader &operator=(reader &r) = delete;
     ~reader();
 
     bool eof();
