@@ -6,8 +6,10 @@
 #include "tree.h"
 
 struct decoder {
-    decoder() = default;
+    decoder() = delete;
     decoder(std::vector<uint8_t>, std::vector<uint8_t>);
+    decoder(decoder &d) = delete;
+    decoder &operator=(decoder &d) = delete;
 
     void decode(uint8_t, std::vector<uint8_t> &);
 

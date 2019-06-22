@@ -9,6 +9,8 @@ const size_t BLOCK_SIZE = 8;
 struct tree {
     tree();
     tree(tree *, tree *, std::vector<uint8_t>, uint64_t);
+    tree(tree &t) = delete;
+    tree &operator=(tree &t) = delete;
     ~tree();
 
     void merge(tree *, tree *);
@@ -35,6 +37,8 @@ private:
 
 struct counter {
     counter();
+    counter(counter &c) = delete;
+    counter &operator=(counter &c) = delete;
     void add(std::vector<uint8_t> const&);
     std::vector<uint64_t> get_cnt() const;
 
