@@ -52,7 +52,11 @@ TEST(correctness, aaaaa) {
     check_no_throw("test/files/aaaaa");
 }
 
+<<<<<<< HEAD
 TEST(correctness, absent_file) {
+=======
+TEST(correctness, fictive_file) {
+>>>>>>> 067e02d6aee4d42c2973a65bb2d9852d23c7ed9f
     check_throw("test/files/not_exist");
 }
 
